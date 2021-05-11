@@ -34,3 +34,35 @@ app.use - 미들웨어와 관련있는 메서드
 앞서 req.url을 정규화 했던 부분
 - 요청을 정확히 파악하기 위해 쿼리스트링과 마지막 슬래시를 없애고, 소문자로 변환하는 일을 직접했어야함
 - 익스프레스의 라우트는 이런 작업을 자동으로 대신한다.
+
+
+
+### 02-meadowlark.js
+
+### 뷰와 레이아웃
+
+- 뷰 : 사용자가 보는것을 책임지는 부분
+    - 이미지나 CSS 파일같은 정적 자원과는 다름 → HTML역시 각 요청에 따라 즉석에서 변할 수 있음
+- 익스프레스에서는 여러가지 뷰 엔진을 지원하며 이들의 추상화 레벨 역시 다양
+    - 퍼그
+    - 핸들바 → 퍼그에 비해 추상화가 좀 덜한 편
+
+### 핸들바
+
+- HTML은 그대로 작성하고, 여기에 특별한 태그를 사용하면 핸들바가 그 태그에 콘텐츠를 삽입하는 방식으로 동작
+- `npm install express-handlebars@3`
+
+```jsx
+const expressHandlebars = require('express-handlebars')
+
+// 핸들바 뷰 엔진 설정
+app.engine('handlebars', expressHandlebars({
+    defaultLayout : 'main',
+}))
+
+app.set('view engine', 'handlebars')
+```
+
+- 뷰 엔진을 생성하고 익스프레스에서 이 엔진을 기본 값으로 사용
+- 레이아웃을 사용하여 사이트에 존재하는 모든 페이지에 프레임 워크를 제공
+
