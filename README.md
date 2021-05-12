@@ -66,3 +66,42 @@ app.set('view engine', 'handlebars')
 - 뷰 엔진을 생성하고 익스프레스에서 이 엔진을 기본 값으로 사용
 - 레이아웃을 사용하여 사이트에 존재하는 모든 페이지에 프레임 워크를 제공
 
+views/layouts/main.handlebars
+
+```jsx
+<!doctype html>
+<html>
+    <head>
+        <title>Meadowlark Travel</title>
+    </head>
+    <body>
+        {{ body }}
+    </body>
+</html>
+```
+
+- 위 표현식은 각 뷰에서 HTML로 바뀜
+- 핸들바 인스턴스를 만들었을때 `defaultLayout : 'main'` 로 기본 레이아웃을 선언했었음
+    - 따로 명시하지 않는다면 이 템플릿이 모든 뷰의 레이아웃으로 사용
+
+```jsx
+app.get('/', (req, res) => res.render('home'))
+
+app.get('/about', (req, res) => res.render('about'))
+
+app.use((req, res) => {
+    res.type('text/plain')
+    res.status(404)
+    res.send('404 - Not Found')
+  })
+  
+app.use((err, req, res, next) => {
+    console.error(err.message)
+    res.type('text/plain')
+    res.status(500)
+    res.send('500 - Server Error')
+})
+```
+
+- 뷰 엔진에서 콘텐츠 타입 text/html과 상태코드 200을 기본으로 반환하므로, 콘텐츠 타입과 상태코드를 따로 명시할 필요는없음
+- 반면 404, 500에 해당하는 폴백 핸들러에는 상태코드를 정확히 명시해야함
