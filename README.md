@@ -133,9 +133,31 @@ app.use(express.static(__dirname + '/public'))
     <header>
        <img src="/img/logo.png" alt="Meadowlark Travel Logo">
     </header>
-    {{ body }}
+    {{{ body }}} <- 주의할 점 {{{ }}}
  </body>
 ```
 
 ⇒ 미들웨어는 순서에 따라 처리되며, 보통 맨 처음이나 앞부분에 선언하는 static 미들웨어가 다른 라우트를 가로챌 수도 있음
 
+--- 
+
+### 03-meadowlark.js
+### 뷰의 동적 콘텐츠
+
+- 뷰는 동적인 정보를 포함할 수 있음
+[ 랜덤한 포춘 쿠키 ]
+
+```jsx
+const fortunes = [
+    "Conquer your fears or they will conquer you.",
+    "Rivers need springs.",
+    "Do not fear what you don't know.",
+    "You will have a pleasant surprise.",
+    "Whenever possible, keep it simple.",
+  ]
+
+app.get('/about', (req, res) => {
+    const randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)]
+    res.render('about', { fortune : randomFortune })
+})
+```
