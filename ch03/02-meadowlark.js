@@ -10,6 +10,8 @@ app.engine('handlebars', expressHandlebars({
 
 app.set('view engine', 'handlebars')
 
+app.use(express.static(__dirname + '/public'))
+
 // app.get - 라우트를 추가하는 메서드 → 경로와 함께 두가지 매개변수를 받음
 app.get('/', (req, res) => res.render('home'))
 
