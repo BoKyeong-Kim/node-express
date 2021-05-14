@@ -161,3 +161,83 @@ app.get('/about', (req, res) => {
     res.render('about', { fortune : randomFortune })
 })
 ```
+
+---
+
+## 모범사례와 버전관리
+### 파일과 디렉터리 구조
+
+- 일반적으로 경로에는 설정파일(package.json)과 README.md 파일, 디렉터리만 있는것이 좋음
+- 소스코드는 대부분 src 디렉터리에 보관 → 실무에서 프로젝트 경로에 소스코드를 보관하면 정신없어질 수 있으니 디렉터리에 파일을 보관하는것이 좋음
+
+
+
+### 버전관리
+
+- 장점
+    - 문서화 → 프로젝트 역사 파악
+    - 작성자 → 누가 무엇을 만들었는지 파악하는 것 중요
+    - 실험 → 자유롭게 실험할 수 있음(새로운 것 시도)
+
+
+
+### 프로젝트 메타데이터
+
+- package.json 파일에는 프로젝트 이름, 저자, 라이센스 정보 등 프로젝트 메타데이터를 저장하려는 목적도 있음
+
+
+
+### 노드 모듈
+
+- **모듈화와 캡슐화 기능을 제공하는 메커니즘**
+- 노드모듈은 npm패키지와 관련은 있지만 다른 개념
+
+
+```jsx
+const express = require('express')
+```
+
+- require는 모듈을 임포트하는 노드 함수
+    - 기본적으로 노드는 node_modules 디렉터리에서 모듈을 찾음
+- 패키지 매니저를 통해 node_modules에 설치되는 모듈 외에도 fs, http, os, path등 노드가 제공하는 '코어 모듈'이 있음
+
+
+
+[위에서 작성한 포춘쿠키 기능을 모듈화하는 방법]
+
+- 모듈을 저장할 디렉터리 생성 → lib/fortune.js
+- 중요한 것은 전역변수 exports를 사용했다는 것
+    - 모듈 바깥에서 모듈에 있는 내용을 보려면 반드시 exports를 사용해야함
+
+**⇒ 캡슐화 원칙을 지키면 잠재적인 오류나 취약한 코드를 피하기 쉬워진다.**
+
+
+```jsx
+// meadowlark.js
+const fortune = require('./lib/fortune')
+
+app.get('/about', (req, res) => {
+    res.render('about', { fortune : fortune.getFortune() })
+})
+
+// ./lib/fortune.js
+const fortuneCookies = [
+    "Conquer your fears or they will conquer you.",
+    "Rivers need springs.",
+    "Do not fear what you don't know.",
+    "You will have a pleasant surprise.",
+    "Whenever possible, keep it simple.",
+  ]
+
+exports.getFortune = () => {
+    const idx = Math.floor(Math.random()*fortuneCookies.length)
+    return fortuneCookies[idx]
+}
+```
+
+- 모듈은 기능을 캡슐화하는 쉽고 강력한 방법
+- 기능을 캡슐화하면 프로젝트의 전체적인 디자인과 유지보수성이 개선되고 테스트도 쉬워진다.
+
+
+---
+
