@@ -390,3 +390,65 @@ jest.fn() : 이 함수는 어떻게 호출되었는지 추적하는 범용함수
 - 코드를 얼마나 테스트했는가에 관한 정량적 답변이지만 단순히 답변할 순 없음
 - 제스트에 자동으로 코드 커버리지를 분석하는 툴이 존재
     - `npm test -- --coverage`
+
+----
+
+## 요청과 응답객체
+
+→ 익스프레스로 웹 서버를 만든다면 거의 대부분이 요청 객체로 시작하고 응답 객체로 끝남
+
+- 요청객체와 응답객체는 노드에서 제공한 걸 익스프레스에서 확장한 객체
+
+클라이언트가 서버에 페이지를 요청하는 방법, 그 페이지를 전송받는 방법
+
+
+
+### URL의 각 부분
+
+`https://localhost:3000/about?test=1#history`
+
+- 프로토콜 → 요청을 어떻게 전송할지 결정 (http, https, file, ftp)
+- 호스트 → 서버 (localhost, google.com)
+    - 호스트 이름 앞에 서브도메인이 있을 수 있음 (www)
+- 포트 → 각 서버에는 숫자 형태의 포트가 있음, 한 서버에서 포트 번호를 중복으로 사용할 수 없음
+- 경로 → 일반적으로 앱에서 가장 많이 사용하는 URL부분 (/about, /search)
+    - 앱에서 사용하는 페이지나 기타 자원은 모두 경로를 통해 유일하게 식별할 수 있어야함
+- 쿼리스트링 → 이름-값 쌍의 컬렉션이며 옵션
+    - 이름과 값은 모두 URL인코드를 사용(JS 내장함수 : encodeURLComponent - 스페이스는 + 기호로 바뀌고, 다른 특수문자는 숫자형 문자 참조로 바뀜)
+- 해시 (또는 fragment) → 서버로 전송되지 않으며 브라우저에서만 사용 (#history, q=express)
+
+
+
+### HTTP 요청 메서드
+
+- http 프로토콜에는 클라이언트가 서버와 통신할 때 사용하는 요청 메서드 컬렉션이 정의되어있음
+    - 가장 많이 사용하는 메서드는 GET과 POST
+- 브라우저에 URL을 입력하거나 링크를 클릭하면 브라우저는 서버에 HTTP GET요청을 보냄
+- 웹사이트의 대부분 페이지 대부분 GET 요청에 반응함
+- POST 요청은 보통 폼 처리 등의 용도로 서버에 정보를 보낼 때 사용
+
+
+
+
+### 요청 헤더
+
+- 페이지를 방문할 때 서버에 URL만 보내는 것은 아님
+- 브라우저는 돌려받을 페이지가 어떤 언어로 되어 있으면 좋겠다는 정보를 서버에 보냄
+
+[00-echo-headers.js]
+
+```jsx
+const express = require('express')
+const app = express()
+
+app.get('/headers', (req, res) => {
+    res.type('text/plain')
+    const headers = Object.entries(req.headers)
+      .map(([key, value]) => `${key}: ${value}`)
+    res.send(headers.join('\n'))
+})
+
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log(`\nnavigate to http://localhost:${port}/headers\n`))
+```
+

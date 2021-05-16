@@ -1,0 +1,16 @@
+{
+  "name": "ch06",
+  "version": "1.0.0",
+  "description": "",
+  "main": "00-echo-headers.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
